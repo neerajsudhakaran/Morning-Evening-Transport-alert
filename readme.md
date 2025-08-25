@@ -1,6 +1,8 @@
 # Wellington Bus & Weather Telegram Alerts using AWS Lambda
 
-This project provides **automated Telegram alerts** for bus arrivals and daily weather in Wellington, NZ, using **AWS Lambda**. There are two types of alerts:
+This is a real project I worked on for my partner. Since she isn’t a tech person, it probably made me look like a nerdy coder 😅 but honestly, it’s quite simple! Especially with AI tools, we can get help whenever we get stuck.
+
+This project provides automated Telegram alerts for bus arrivals and daily weather in Wellington, NZ, using AWS Lambda. There are two types of alerts:
 
 1. **Morning Alert (7:30 AM NZST)** – Provides both **bus schedule** and **daily weather forecast**.  
 2. **Evening Alert (15 min prior to shift end)** – Provides **bus schedule only** (no weather) for convenient planning after work.
