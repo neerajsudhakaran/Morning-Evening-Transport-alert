@@ -91,4 +91,4 @@ cron(30 19 * * ? *)
 ---
 
 ## Example Morning Alert Output
-    ![Alt Text](Image1)
+    ![Alert](Image1.jpg)
