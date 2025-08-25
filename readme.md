@@ -1,31 +1,51 @@
-# NZ Bus & Weather Telegram Bot
+# Wellington Bus & Weather Telegram Alerts
 
-This AWS Lambda project fetches **bus arrival predictions** and **weather updates** for Wellington, NZ, and sends them as a message to a **Telegram bot** every morning at 7:30 AM NZST.
+This project provides **automated Telegram alerts** for bus arrivals and daily weather in Wellington, NZ, using **AWS Lambda**. There are two types of alerts:
+
+1. **Morning Alert (7:30 AM NZST)** – Provides both **bus schedule** and **daily weather forecast**.  
+2. **Evening Alert (15 min prior to shift end)** – Provides **bus schedule only** (no weather) for convenient planning after work.
+
+---
+
+## Motivation
+
+- During **weekdays**, buses run frequently every 15–30 minutes. Alerts are **helpful but not critical**.  
+- During **weekends (Saturday & Sunday)**, buses run less frequently (every 45–60 minutes), and some may be **cancelled or arrive early**, which can be confusing.  
+- The evening alert is designed to **notify 15 minutes prior to the end of the work shift**, helping avoid missing buses, especially when some arrive **5–10 minutes early**.
 
 ---
 
 ## Features
 
-- Fetch **bus arrivals** for stop 6224 (buses 4 and 38x, top 4 departures)
-- Fetch **current weather**, **next 24h forecast**, and **weather alerts**
-- Send **combined info** via Telegram
-- Runs automatically every day at 7:30 AM NZST using **EventBridge cron**
+- **Morning Alert**  
+  - Fetches top 4 buses (services 4 or 38x) for stop 6224  
+  - Shows **aimed arrival times** and **delay**  
+  - Fetches **current weather** and **next 24-hour forecast**  
+  - Sends a **formatted Telegram message**
+
+- **Evening Alert**  
+  - Fetches top 4 buses (services 4 or 38x) for stop 6224  
+  - Sends **bus arrival times only** to Telegram
 
 ---
 
 ## Architecture
 
-EventBridge (7:30 AM NZST)
+EventBridge Schedule
 │
 ▼
 AWS Lambda
 ┌──────────────┐
-│ Bus API │
-│ Weather API │
+│ Morning API │
+│ Bus + Weather│
 └──────────────┘
 │
 ▼
 Telegram Bot
+┌──────────────┐
+│ Evening API │
+│ Bus Only │
+└──────────────┘
 
 
 ---
@@ -36,56 +56,49 @@ Telegram Bot
 
 - Runtime: **Python 3.11**
 - Timeout: **10–15 seconds**
-- Memory: 128 MB is sufficient
+- Memory: 128 MB
 
 ### 2. Environment Variables
 
-Set these in Lambda console:
+Set these in Lambda for **both functions**:
 
-| Variable            | Value                                |
-|--------------------|--------------------------------------|
-| `TELEGRAM_TOKEN`     | Telegram Bot API token                |
-| `TELEGRAM_CHAT_ID`   | Your chat ID (e.g., `7132393434`)   |
-| `METLINK_API_KEY`    | Metlink API key                       |
-| `METEO_API_KEY`      | Meteosource API key                   |
+| Variable            | Purpose                           |
+|--------------------|----------------------------------|
+| `TELEGRAM_TOKEN`     | Telegram Bot API token            |
+| `TELEGRAM_CHAT_ID`   | Your chat ID                     |
+| `METLINK_API_KEY`    | Metlink API key                  |
+| `METEO_API_KEY`      | Meteosource API key (only morning Lambda) |
 
 ### 3. EventBridge Schedule
 
-- Cron expression: `cron(30 19 * * ? *)`  
-  - Triggers Lambda at **7:30 AM NZST** daily
+- **Morning alert** → 7:30 AM NZST  
+
+cron(30 19 * * ? *)
+
+- **Evening alert** → 15 minutes prior to end of work shift (adjust hours)  
+
+> Remember: NZST = UTC +12 hours.
 
 ---
 
 ## Usage
 
-1. Deploy Lambda with the provided Python code.
-2. Attach environment variables.
-3. Test manually to ensure Telegram message is sent.
-4. EventBridge will automatically trigger daily.
+1. Deploy each Lambda function separately.
+2. Add the environment variables in the Lambda console.
+3. Configure EventBridge rules for the appropriate time.
+4. Ensure Telegram bot is created and your chat ID is correct.
 
 ---
 
-## Python Standard Library Only
-
-This project uses only the **Python standard library (`urllib`)**—no external dependencies are required.
-
----
-
-## Telegram Bot Setup
-
-1. Create a bot with [@BotFather](https://t.me/BotFather)
-2. Get the **bot token**
-3. Send a message to your bot and get your **chat ID**
-4. Add token and chat ID as environment variables in Lambda
-
----
-
-## Example Output
+## Example Morning Alert Output
 
 🚌 Bus Schedule (Stop 6224):
 Bus 4 at Kilbirnie-A
 Arrival: 2025-08-26T06:50:00+12:00
 Delay: On time
+Bus 38x at Kilbirnie-A
+Arrival: 2025-08-26T07:20:00+12:00
+Delay: 2 min late
 🌤️ Current Weather in Wellington:
 Temperature: 7.8°C
 Condition: Partly clear
