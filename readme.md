@@ -27,13 +27,13 @@ By automating these alerts, we reduce the stress of checking schedules manually 
 ## Features
 
 - **Morning Alert**  
-  - Fetches top 4 buses (services 4 or 38x) for stop 6224  
+  - Fetches top 4 buses (services 4 or 38x) for stop 7088  (Where we live!)  
   - Shows **aimed arrival times** and **delay**  
   - Fetches **current weather** and **next 24-hour forecast**  
   - Sends a **formatted Telegram message**
 
 - **Evening Alert**  
-  - Fetches top 4 buses (services 4 or 38x) for stop 6224 (Where I live!)  
+  - Fetches top 4 buses (services 4 or 38x) for stop 6224 (Where my Partner Works!)  
   - Sends **bus arrival times only** to Telegram
 
 ---
@@ -80,3 +80,25 @@ cron(30 19 * * ? *)
 
 ## Example Morning Alert Output
  ![Example](image.jpeg)
+
+
+🚀 **On-Demand Alerts via Telegram Bot**
+
+We can trigger the Lambda function instantly using our Telegram bot. This is especially helpful when we need alerts outside the normal schedule, for example when leaving for work at a different time.
+
+1️⃣ **Telegram Bot Setup**  
+   - **Bot token:** `YOUR_TELEGRAM_BOT_TOKEN`  
+   - **Chat ID:** `YOUR_CHAT_ID`  
+
+2️⃣ **Available Commands**  
+   - `/bus_now` – Fetch the next 4 buses for our stop *immediately*.  
+   - `/bus_custom HH:MM` – Fetch bus schedules for a custom departure time.
+
+3️⃣ **Lambda Integration**  
+   - The bot is connected to our **AWS Lambda function** via an **API Gateway endpoint**.  
+   - Sending a command triggers the Lambda **instantly**, bypassing the scheduled EventBridge cron.
+
+4️⃣ **Benefits**  
+   - ✅ Access bus schedules on-demand.  
+   - ✅ Handle unexpected changes in departure times.  
+   - ✅ Useful anytime, not just during the morning or evening scheduled alerts.
