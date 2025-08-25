@@ -1,4 +1,4 @@
-# Wellington Bus & Weather Telegram Alerts
+# Wellington Bus & Weather Telegram Alerts using AWS Lambda
 
 This project provides **automated Telegram alerts** for bus arrivals and daily weather in Wellington, NZ, using **AWS Lambda**. There are two types of alerts:
 
@@ -91,19 +91,4 @@ cron(30 19 * * ? *)
 ---
 
 ## Example Morning Alert Output
-
-🚌 Bus Schedule (Stop 6224):
-Bus 4 at Kilbirnie-A
-Arrival: 2025-08-26T06:50:00+12:00
-Delay: On time
-Bus 38x at Kilbirnie-A
-Arrival: 2025-08-26T07:20:00+12:00
-Delay: 2 min late
-🌤️ Current Weather in Wellington:
-Temperature: 7.8°C
-Condition: Partly clear
-📅 Forecast for 2025-08-26:
-Fog in the morning, sunny later. Temperature 7/12 °C.
-High: 12.2°C, Low: 7.0°C
-
-✅ No active weather alerts.
+    ![Alt Text](Image1)
