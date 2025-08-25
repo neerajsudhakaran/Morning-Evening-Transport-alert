@@ -9,9 +9,18 @@ This project provides **automated Telegram alerts** for bus arrivals and daily w
 
 ## Motivation
 
-- During **weekdays**, buses run frequently every 15–30 minutes. Alerts are **helpful but not critical**.  
-- During **weekends (Saturday & Sunday)**, buses run less frequently (every 45–60 minutes), and some may be **cancelled or arrive early**, which can be confusing.  
-- The evening alert is designed to **notify 15 minutes prior to the end of the work shift**, helping avoid missing buses, especially when some arrive **5–10 minutes early**.
+Managing transport in Wellington can be tricky, especially on weekends.
+
+During weekdays, buses run frequently, every 15–30 minutes, so missing one is rarely a big issue. Alerts in the morning or evening are helpful but not critical.
+
+However, during weekends (Saturday & Sunday), things are different. Buses run less often, typically every 45–60 minutes. Some services may be cancelled, and others might arrive earlier than scheduled. This can be frustrating: while early arrivals might help some people reach home faster, for others it is annoying if they are okay waiting a little longer. Arriving 5–10 minutes early at the stop can easily cause a missed bus.
+
+The morning alert gives an overview of the next buses and the weather forecast to plan the day.
+
+The evening alert, sent 15 minutes before the end of a shift, ensures you know the next 4 buses, helping avoid missed rides home. This is particularly valuable on weekends when buses are sparse and timing is crucial.
+
+By automating these alerts, we reduce the stress of checking schedules manually and help plan trips efficiently, especially when time-sensitive shifts and irregular weekend schedules come into play.
+
 
 ---
 
@@ -24,29 +33,8 @@ This project provides **automated Telegram alerts** for bus arrivals and daily w
   - Sends a **formatted Telegram message**
 
 - **Evening Alert**  
-  - Fetches top 4 buses (services 4 or 38x) for stop 6224  
+  - Fetches top 4 buses (services 4 or 38x) for stop 6224 (Where I live!)  
   - Sends **bus arrival times only** to Telegram
-
----
-
-## Architecture
-
-EventBridge Schedule
-│
-▼
-AWS Lambda
-┌──────────────┐
-│ Morning API │
-│ Bus + Weather│
-└──────────────┘
-│
-▼
-Telegram Bot
-┌──────────────┐
-│ Evening API │
-│ Bus Only │
-└──────────────┘
-
 
 ---
 
@@ -91,4 +79,4 @@ cron(30 19 * * ? *)
 ---
 
 ## Example Morning Alert Output
-    ![Alert](Image1.jpg)
+ ![Example](image.jpeg)
